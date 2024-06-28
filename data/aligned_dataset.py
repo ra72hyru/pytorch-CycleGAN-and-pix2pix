@@ -1,4 +1,6 @@
 import os
+
+import numpy as np
 from data.base_dataset import BaseDataset, get_params, get_transform
 from data.image_folder import make_dataset
 from PIL import Image
@@ -39,7 +41,12 @@ class AlignedDataset(BaseDataset):
         # read a image given a random integer index
         AB_path = self.AB_paths[index]
         #AB = Image.open(AB_path).convert('RGB')
-        AB = Image.open(AB_path).convert('I')
+        #AB = Image.open(AB_path).convert('I')
+        AB = Image.open(AB_path)
+        AB = np.array(AB)
+        AB = AB/256
+        AB = Image.fromarray(AB)
+        AB = AB.convert('RGB')
         # split AB image into A and B
         w, h = AB.size
         w2 = int(w / 2)

@@ -6,7 +6,7 @@ from PIL import Image
 import os
 
 
-def tensor2im(input_image, imtype=np.int32):
+def tensor2im(input_image, imtype=np.uint8):
     """"Converts a Tensor array into a numpy image array.
 
     Parameters:
@@ -21,9 +21,9 @@ def tensor2im(input_image, imtype=np.int32):
         image_numpy = image_tensor[0].cpu().float().numpy()  # convert it into a numpy array
         if image_numpy.shape[0] == 1:  # grayscale to RGB
             image_numpy = np.tile(image_numpy, (3, 1, 1))
-        #image_numpy = (np.transpose(image_numpy, (1, 2, 0)) + 1) / 2.0 * 255.0  # post-processing: tranpose and scaling
+        image_numpy = (np.transpose(image_numpy, (1, 2, 0)) + 1) / 2.0 * 255.0  # post-processing: tranpose and scaling
         #print(image_numpy)
-        image_numpy = (np.transpose(image_numpy, (1, 2, 0)) + 1) / 2.0 * 65535.0  # post-processing: tranpose and scaling
+        #image_numpy = (np.transpose(image_numpy, (1, 2, 0)) + 1) / 2.0 * 65535.0  # post-processing: tranpose and scaling
     else:  # if it is a numpy array, do nothing
         image_numpy = input_image
     #print(image_numpy)
@@ -58,9 +58,9 @@ def save_image(image_numpy, image_path, aspect_ratio=1.0):
     """
 
     #print(print_numpy(image_numpy[:, :, 0]))
-    #image_pil = Image.fromarray(image_numpy)
+    image_pil = Image.fromarray(image_numpy)
     #image_pil = Image.fromarray((image_numpy * 255).astype(np.uint8))
-    image_pil = Image.fromarray(image_numpy[:, :, 0], mode="I")
+    #image_pil = Image.fromarray(image_numpy[:, :, 0])
     h, w, _ = image_numpy.shape
 
     if aspect_ratio > 1.0:
